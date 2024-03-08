@@ -10,11 +10,28 @@ export default function TodoList() {
 
     const task = event.target.task.value;
 
-    alert(`New task added:${task}`);
+    if (!task) {
+      alert('Please enter a valid task');
+      return;
+    }
+
+    setTodos((prevTodos) => [...prevTodos, { task: task, completed: false }]);
 
     //Reset the form
     event.target.reset();
   }
+  function changeTaskStatus(index) {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
+    setTodos(newTodos);
+  }
+
+  function deleteTask(index) {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  }
+
   return (
     <div className="container my-5">
       <div
@@ -44,8 +61,19 @@ export default function TodoList() {
             >
               <div className="me-auto">{todo.task}</div>
               <div>
-                <i className="bi bi-check square"></i>
-                <i className="bi bi-trash"></i>
+                <i
+                  className={
+                    'h5 me-2 ' +
+                    (todo.completed ? 'bi bi-check-square' : 'bi bi-square')
+                  }
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => changeTaskStatus(index)}
+                ></i>
+                <i
+                  className="bi bi-trash h5 me-2 text-danger"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => deleteTask(index)}
+                ></i>
               </div>
             </div>
           );
