@@ -1,9 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 export default function TodoList() {
-  const [todos, setTodos] = useState([
-    { task: 'first task', completed: false },
-    { task: 'second task', completed: true },
-  ]);
+  const [todos, setTodos] = useState(getTodos());
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -31,6 +28,20 @@ export default function TodoList() {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   }
+
+  //Function for the todos storage
+  function getTodos(){
+    const data =localStorage.getItem("todos");
+    const json = JSON.parse(data)
+    if (json){
+        return json
+    }
+    return[]
+  }
+
+  useEffect(()=>{
+    localStorage.setItem("todos",JSON.stringify(todos))
+  },[todos])
 
   return (
     <div className="container my-5">
